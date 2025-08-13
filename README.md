@@ -179,17 +179,6 @@ sequenceDiagram
   end
 ```
 
-### Descrição do Fluxo
-
-1. **Inicialização**: O servidor Fastify é iniciado com validação Zod e documentação Swagger
-2. **Validação**: Todas as requisições passam por validação de schema usando Zod
-3. **Criação de Cursos**: 
-   - Valida título (mínimo 5 caracteres)
-   - Insere no PostgreSQL
-   - Retorna ID do curso criado
-4. **Listagem de Cursos**: Consulta todos os cursos do banco
-5. **Busca por ID**: Valida UUID e busca curso específico no banco
-
 ## 📚 Comandos Úteis
 
 ```bash
