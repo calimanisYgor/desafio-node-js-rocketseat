@@ -1,7 +1,15 @@
 import fastify from "fastify";
-import { eq } from "drizzle-orm";
-import { db } from "./src/database/client.ts";
-import { courses } from "./src/database/schema.ts";
+import {
+  validatorCompiler,
+  serializerCompiler,
+  type ZodTypeProvider,
+  jsonSchemaTransform,
+} from "fastify-type-provider-zod";
+import { fastifySwagger } from "@fastify/swagger";
+import { createCoursesRoute } from "./src/routes/create-courses.ts";
+import { getCoursesRoute } from "./src/routes/get-courses.ts";
+import { getCoursesByIdRoute } from "./src/routes/get-courses-by-id.ts";
+import  scalarAPIReference  from "@scalar/fastify-api-reference"
 
 const server = fastify({
   logger: {
@@ -13,63 +21,32 @@ const server = fastify({
       },
     },
   },
-});
+}).withTypeProvider<ZodTypeProvider>();
 
-server.get("/courses", async (request, reply) => {
-  const result = await db
-    .select({
-      id: courses.id,
-      title: courses.title,
-    })
-    .from(courses);
+if (process.env.NODE_ENV === "development") {
+  server.register(fastifySwagger, {
+    openapi: {
+      info: {
+        title: "Desafio Node.Js",
+        version: "1.0.0",
+      },
+    },
+    transform: jsonSchemaTransform,
+  });
+  server.register(scalarAPIReference, {
+    routePrefix: '/docs',
+    configuration:{
+      theme: 'bluePlanet'
+    }
+  })
+}
 
-  return reply.send({ courses: result });
-});
+server.setValidatorCompiler(validatorCompiler);
+server.setSerializerCompiler(serializerCompiler);
 
-server.get("/courses/:id", async (request, reply) => {
-  type Params = {
-    id: string;
-  };
-
-  const params = request.params as Params;
-
-  const courseId = params.id;
-
-  const result = await db
-    .select()
-    .from(courses)
-    .where(eq(courses.id, courseId));
-
-  if (result.length > 0) {
-    return { course: result[0] };
-  }
-
-  return reply.status(401).send();
-});
-
-server.post("/courses", async (request, reply) => {
-  type Body = {
-    title: string;
-  };
-
-  const body = request.body as Body;
-  const courseTitle = body.title;
-
-  if (!courseTitle) {
-    return reply
-      .status(400)
-      .send({ message: "Título do curso é obrigatório!" });
-  }
-
-  const result = await db
-    .insert(courses)
-    .values({
-      title: courseTitle,
-    })
-    .returning();
-
-  return reply.status(201).send(result[0].id);
-});
+server.register(createCoursesRoute);
+server.register(getCoursesRoute);
+server.register(getCoursesByIdRoute);
 
 server.listen({ port: 3333 }).then(() => {
   console.log("HTTP server running!");
