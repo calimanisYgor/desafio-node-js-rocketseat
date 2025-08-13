@@ -1,55 +1,53 @@
 import fastify from "fastify";
-import crypto from "node:crypto";
+import {
+  validatorCompiler,
+  serializerCompiler,
+  type ZodTypeProvider,
+  jsonSchemaTransform,
+} from "fastify-type-provider-zod";
+import { fastifySwagger } from "@fastify/swagger";
+import { createCoursesRoute } from "./src/routes/create-courses.ts";
+import { getCoursesRoute } from "./src/routes/get-courses.ts";
+import { getCoursesByIdRoute } from "./src/routes/get-courses-by-id.ts";
+import  scalarAPIReference  from "@scalar/fastify-api-reference"
+
 const server = fastify({
-    logger: {
-      transport: {
-        target: 'pino-pretty',
-        options: {
-          translateTime: 'HH:MM:ss Z',
-          ignore: 'pid,hostname',
-        },
+  logger: {
+    transport: {
+      target: "pino-pretty",
+      options: {
+        translateTime: "HH:MM:ss Z",
+        ignore: "pid,hostname",
       },
     },
+  },
+}).withTypeProvider<ZodTypeProvider>();
+
+if (process.env.NODE_ENV === "development") {
+  server.register(fastifySwagger, {
+    openapi: {
+      info: {
+        title: "Desafio Node.Js",
+        version: "1.0.0",
+      },
+    },
+    transform: jsonSchemaTransform,
+  });
+  server.register(scalarAPIReference, {
+    routePrefix: '/docs',
+    configuration:{
+      theme: 'bluePlanet'
+    }
   })
+}
 
-const courses = [
-  { id: "1", title: "Curso Node.Js" },
-  { id: "2", title: "Curso React" },
-  { id: "3", title: "Curso React Native" },
-];
+server.setValidatorCompiler(validatorCompiler);
+server.setSerializerCompiler(serializerCompiler);
 
-server.get("/courses", () => {
-  return { courses };
-});
-
-server.get("/courses/:id", (request, reply) => {
-  type Params = {
-    id: string;
-  };
-
-  const params = request.params as Params;
-
-  const courseId = params.id;
-
-  const course = courses.find((course) => course.id === courseId);
-
-  if (course) {
-    return { course };
-  }
-
-  return reply.status(401).send();
-});
-
-server.post("/courses", (request, reply) => {
-  type Body = {
-
-  };
-  const courseId = crypto.randomUUID();
-  courses.push({ id: courseId, title: "curso" });
-
-  return reply.status(201).send(courseId);
-});
+server.register(createCoursesRoute);
+server.register(getCoursesRoute);
+server.register(getCoursesByIdRoute);
 
 server.listen({ port: 3333 }).then(() => {
-  console.log("HTTP srever running!");
+  console.log("HTTP server running!");
 });
