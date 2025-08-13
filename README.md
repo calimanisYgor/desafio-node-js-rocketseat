@@ -2,18 +2,6 @@
 
 Uma API REST completa para gerenciamento de cursos, construída com Node.js, Fastify e PostgreSQL.
 
-## 📋 Índice
-
-- [Sobre o Projeto](#sobre-o-projeto)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Funcionalidades](#funcionalidades)
-- [Pré-requisitos](#pré-requisitos)
-- [Como Executar](#como-executar)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [API Endpoints](#api-endpoints)
-- [Banco de Dados](#banco-de-dados)
-- [Fluxo da Aplicação](#fluxo-da-aplicação)
-
 ## 🎯 Sobre o Projeto
 
 Este projeto é uma API REST para gerenciamento de cursos, desenvolvida como parte do desafio da Rocketseat. A aplicação permite criar, listar e buscar cursos específicos, utilizando as melhores práticas de desenvolvimento com TypeScript, validação de dados e documentação automática da API.
@@ -69,8 +57,8 @@ npm install
 ### 3. Configure as variáveis de ambiente
 Crie um arquivo `.env` na raiz do projeto:
 ```env
-DATABASE_URL=
-NODE_ENV=
+DATABASE_URL= URL de conexão com PostgreSQL
+NODE_ENV = Ambiente de execução (development/production)
 ```
 
 ### 4. Inicie o banco de dados
@@ -90,24 +78,6 @@ npm run dev
 ```
 
 A API estará disponível em `http://localhost:3333`
-
-## 📁 Estrutura do Projeto
-
-```
-desafio-node-js-rocketseat/
-├── src/
-│   ├── database/
-│   │   ├── client.ts          # Conexão com banco de dados
-│   │   └── schema.ts          # Schemas das tabelas
-│   └── routes/
-│       ├── create-courses.ts   # Rota para criar cursos
-│       ├── get-courses.ts      # Rota para listar cursos
-│       └── get-courses-by-id.ts # Rota para buscar curso por ID
-├── drizzle/                    # Migrações do banco
-├── docker-compose.yml          # Configuração do PostgreSQL
-├── server.ts                   # Servidor principal
-└── package.json
-```
 
 ## 🔌 API Endpoints
 
@@ -241,20 +211,4 @@ docker-compose down           # Para PostgreSQL
 Em modo desenvolvimento, a documentação está disponível em:
 - **Scalar API Reference**: `http://localhost:3333/docs`
 
-## 🔧 Configurações
 
-### Portas
-- **API**: 3333
-- **PostgreSQL**: 5432
-
-### Variáveis de Ambiente
-- `DATABASE_URL`: URL de conexão com PostgreSQL
-- `NODE_ENV`: Ambiente de execução (development/production)
-
-## 📝 Licença
-
-Este projeto foi desenvolvido como parte do desafio da Rocketseat.
-
----
-
-**Desenvolvido com ❤️ usando as melhores práticas de desenvolvimento Node.js**
