@@ -31,6 +31,7 @@ async function seed() {
     .values([
       { title: `Curso de ${faker.helpers.arrayElement(programmingLanguages)}` },
       { title: `Curso de ${faker.helpers.arrayElement(programmingLanguages)}` },
+      { title: `Curso de ${faker.helpers.arrayElement(programmingLanguages)}` },
     ])
     .returning();
 
