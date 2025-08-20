@@ -140,3 +140,6 @@ vite.config.ts.timestamp-*
 
 # coverage (vitest tests)
 coverage/
+
+#request file
+requests.http

@@ -36,6 +36,20 @@
       "when": 1755370490692,
       "tag": "0004_overconfident_wendell_vaughn",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1755564757578,
+      "tag": "0005_tired_lady_deathstrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1755565120504,
+      "tag": "0006_boring_lockjaw",
+      "breakpoints": true
     }
   ]
 }
